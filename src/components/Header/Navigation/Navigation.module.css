@@ -1,0 +1,13 @@
+.navbarList {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    font-size: 1.2rem;
+    padding-top: 1rem;
+}
+
+.navbarList li {
+    margin: 0 1rem;
+}
+
+

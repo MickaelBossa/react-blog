@@ -8,7 +8,7 @@ import { createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
 
 // Composants
 import Home from './containers/Home/Home';
-import Navbar from './components/Navbar/Navbar';
+import Layout from './hoc/Layout/Layout';
 import ErrorPage from './components/ErrorPage/ErrorPage';
 import Articles from './containers/Articles/Articles';
 import Contact from './containers/Contact/Contact';
@@ -17,7 +17,7 @@ import Contact from './containers/Contact/Contact';
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <Navbar />,
+        element: <Layout />,
         errorElement: <ErrorPage />,
         children: [
             { index: true, element: <Home /> },
