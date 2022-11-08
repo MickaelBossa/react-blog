@@ -12,6 +12,7 @@ import Layout from './hoc/Layout/Layout';
 import ErrorPage from './components/ErrorPage/ErrorPage';
 import Articles from './containers/Articles/Articles';
 import Contact from './containers/Contact/Contact';
+import Article from './containers/Articles/Article/Article';
 
 // Router
 const router = createBrowserRouter([
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
             {
                 path: '/contact',
                 element: <Contact />,
+            },
+            {
+                path: '/articles/:id',
+                element: <Article />,
             },
         ],
     },

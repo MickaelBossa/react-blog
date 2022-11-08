@@ -3,19 +3,29 @@ import classes from './NavigationItem.module.css';
 
 // Librairies
 import React, { PropsWithChildren } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 // Type
-type NavigationItemProps = PropsWithChildren <{
+type NavigationItemProps = PropsWithChildren<{
     path: string;
 }>;
 
-export default function NavigationItem({ path, children }: NavigationItemProps) {
+export default function NavigationItem({
+    path,
+    children,
+}: NavigationItemProps) {
     return (
         <li>
-            <Link className={classes.navlinks} to={path}>
+            <NavLink
+                className={({ isActive }) =>
+                    isActive
+                        ? classes.navlinks + ' ' + classes.active
+                        : classes.navlinks
+                }
+                to={path}
+            >
                 {children}
-            </Link>
+            </NavLink>
         </li>
     );
 }

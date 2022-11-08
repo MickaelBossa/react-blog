@@ -6,6 +6,6 @@ import React from 'react'
 
 export default function Contact() {
   return (
-    <h1 className={classes.title}>Contact</h1>
+    <h1>Contact</h1>
   )
 }

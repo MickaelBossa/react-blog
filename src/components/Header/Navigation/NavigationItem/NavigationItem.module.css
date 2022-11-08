@@ -1,7 +1,14 @@
 .navlinks{
     text-decoration: none;
-    color: black;
     text-transform: uppercase;
     font-weight: bold;
     margin: 0 1rem;
+}
+
+.navlinks:hover, .active, .navlinks:focus {
+    color: #fb743e;
+}
+
+.test {
+    color: green;
 }

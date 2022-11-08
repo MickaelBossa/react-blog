@@ -6,6 +6,6 @@ import React from 'react'
 
 export default function Articles() {
   return (
-    <h1 className={classes.title}>Articles</h1>
+    <h1>Articles</h1>
   )
 }
