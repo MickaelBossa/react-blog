@@ -5,6 +5,7 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
+import routes from './config/routes';
 
 // Composants
 import Home from './containers/Home/Home';
@@ -17,21 +18,31 @@ import Article from './containers/Articles/Article/Article';
 // Router
 const router = createBrowserRouter([
     {
-        path: '/',
+        path: routes.HOME,
         element: <Layout />,
         errorElement: <ErrorPage />,
         children: [
             { index: true, element: <Home /> },
             {
-                path: '/articles',
+                path: routes.ARTICLES,
                 element: <Articles />,
             },
             {
-                path: '/contact',
+                path: routes.CONTACT,
                 element: <Contact />,
+                children: [
+                    {
+                        path: 'email',
+                        element: <p>mymail@gmail.com</p>,
+                    },
+                    {
+                        path: 'phone',
+                        element: <p>06.00.00.00.00</p>,
+                    },
+                ],
             },
             {
-                path: '/articles/:id',
+                path: `${routes.ARTICLES}/:id`,
                 element: <Article />,
             },
         ],

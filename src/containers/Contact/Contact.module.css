@@ -1,0 +1,14 @@
+.contactBtn {
+    background-color: #FAA58E;
+    padding: 0.5rem 1rem;
+    border-radius: 0.2rem;
+    border: none;
+    color: #ffff;
+    margin: 0 0.5rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.contactBtn:hover, .active {
+    background-color: #fb743e;
+}

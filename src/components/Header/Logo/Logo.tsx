@@ -6,6 +6,6 @@ import React from 'react'
 
 export default function Logo() {
   return (
-    <h1 className={classes.logo}>Logo</h1>
+    <p className={classes.logo}>Logo</p>
   )
 }
