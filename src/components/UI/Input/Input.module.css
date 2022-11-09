@@ -1,0 +1,13 @@
+.inputContainer label {
+    text-transform: uppercase;
+    color: #404258;
+    display: block;
+    font-weight: 500;
+}
+
+.inputContainer input, .inputContainer textarea {
+    width: 80vw;
+    height: 10vh;
+    text-align: center;
+    margin: 1rem 0;
+}

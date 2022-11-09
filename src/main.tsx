@@ -14,6 +14,7 @@ import ErrorPage from './components/ErrorPage/ErrorPage';
 import Articles from './containers/Articles/Articles';
 import Contact from './containers/Contact/Contact';
 import Article from './containers/Articles/Article/Article';
+import AddArticle from './containers/Admin/AddArticle/AddArticle';
 
 // Router
 const router = createBrowserRouter([
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
             {
                 path: `${routes.ARTICLES}/:id`,
                 element: <Article />,
+            },
+            {
+                path: routes.ADDARTICLE,
+                element: <AddArticle />,
             },
         ],
     },

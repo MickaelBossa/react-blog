@@ -14,6 +14,7 @@ export default function Navigation() {
                 <NavigationItem path={routes.HOME}>Accueil</NavigationItem>
                 <NavigationItem path={routes.ARTICLES}>Articles</NavigationItem>
                 <NavigationItem path={routes.CONTACT}>Contact</NavigationItem>
+                <NavigationItem path={routes.ADDARTICLE}>Ajouter</NavigationItem>
             </ul>
         </nav>
     );
