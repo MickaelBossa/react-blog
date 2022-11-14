@@ -10,7 +10,9 @@ type FormProps = {
     elementType: string;
     value: string | { value: string; displayValue: string }[];
     config: { type: string; placeholder: string };
-    changed: any // To change later
+    changed: any; // To change later
+    valid: boolean;
+    touched: boolean
 };
 
 export default function Input({
@@ -19,9 +21,26 @@ export default function Input({
     config,
     value,
     changed,
+    valid,
+    touched
 }: FormProps) {
-    let inputElement: JSX.Element | undefined;
 
+    // Variables
+    let inputElement: JSX.Element | undefined;
+    let inputValidation = '';
+
+    // Vérifier si les input ont étaient touchés ou non
+    if(!touched) {
+        inputValidation = '';
+    } else {
+        if(valid) {
+            inputValidation = ''
+        } else {
+            inputValidation = classes.invalidInput;
+        }
+    }
+
+    // Vérifier le type des éléments à afficher
     if (elementType === 'input') {
         inputElement = (
             <input
@@ -29,6 +48,7 @@ export default function Input({
                 placeholder={config.placeholder}
                 value={typeof value === 'string' ? value : value[0].value}
                 onChange={changed}
+                className={inputValidation}
             />
         );
     } else if (elementType === 'textarea') {
@@ -37,14 +57,18 @@ export default function Input({
                 placeholder={config.placeholder}
                 value={typeof value === 'string' ? value : value[0].value}
                 onChange={changed}
+                className={inputValidation}
             />
         );
     } else if (elementType === 'select') {
         inputElement = (
-            <select onChange={changed}>
+            <select onChange={changed} className={inputValidation} >
                 {typeof value !== 'string'
                     ? value.map((element) => (
-                          <option value={element.value} key={element.displayValue}>
+                          <option
+                              value={element.value}
+                              key={element.displayValue}
+                          >
                               {element.displayValue}
                           </option>
                       ))

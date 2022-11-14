@@ -3,11 +3,16 @@
     color: #404258;
     display: block;
     font-weight: 500;
+    margin-top: 1.5rem;
 }
 
 .inputContainer input, .inputContainer textarea {
     width: 80vw;
     height: 10vh;
     text-align: center;
-    margin: 1rem 0;
+}
+
+.invalidInput {
+    background-color: #f59090;
+    border: 3px solid red;
 }

@@ -2,10 +2,17 @@
 import classes from './AddArticle.module.css';
 
 // Librairie
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 
 // Composant
 import Input from '../../../components/UI/Input/Input';
+
+// Type
+type InputValidationRules = {
+    required: boolean;
+    minLength: number;
+    maxLength: number;
+};
 
 export default function AddArticle() {
     // State
@@ -20,6 +27,17 @@ export default function AddArticle() {
             },
             value: '',
             label: "Titre de l'article",
+            valid: false,
+            validationRules: {
+                required: true,
+                minLength: 5,
+                maxLength: 85,
+            },
+            errorMessages: {
+                forMinLength: 'Ce champ doit contenir au moins 5 caractères',
+                forMaxLength: 'Ce champ doit contenir moins de 85 caractères',
+            },
+            touched: false,
         },
         {
             id: 1,
@@ -31,6 +49,17 @@ export default function AddArticle() {
             },
             value: '',
             label: "Contenu de l'article",
+            valid: false,
+            validationRules: {
+                required: true,
+                minLength: 5,
+                maxLength: 10000,
+            },
+            errorMessages: {
+                forMinLength: 'Ce champ doit contenir au moins 5 caractères',
+                forMaxLength: 'Ce champ doit contenir moins de 10000 caractères',
+            },
+            touched: false,
         },
         {
             id: 2,
@@ -42,44 +71,145 @@ export default function AddArticle() {
             },
             value: '',
             label: "Nom de l'auteur",
+            valid: false,
+            validationRules: {
+                required: true,
+                minLength: 2,
+                maxLength: 30,
+            },
+            errorMessages: {
+                forMinLength: 'Ce champ doit contenir au moins 2 caractères',
+                forMaxLength: 'Ce champ doit contenir moins de 30 caractères',
+            },
+            touched: false
         },
         {
             id: 3,
             elementName: 'draft',
             elementType: 'select',
-            elementConfig : {
+            elementConfig: {
                 type: '',
-                placeholder: ''
+                placeholder: '',
             },
             value: [
-                {value:'yes', displayValue:'Brouillon'},
-                {value: 'no', displayValue:'Publié'}
+                { value: 'yes', displayValue: 'Brouillon' },
+                { value: 'no', displayValue: 'Publié' },
             ],
-            label: "État de l'article"
-        }
+            label: "État de l'article",
+            valid: true,
+            validationRules: {
+                required: true,
+                minLength: 1,
+                maxLength: 85,
+            },
+            errorMessages: {
+                forMinLength: 'Ce champ doit contenir au moins 1 caractère',
+                forMaxLength: 'Ce champ doit contenir moins de 85 caractères',
+            },
+            touched: true,
+        },
     ]);
 
+    const [isValid, setIsValid] = useState(false);
+
     // Functions
-    const inputChangedHandler = (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
+    const inputChangedHandler = (
+        event: React.ChangeEvent<HTMLInputElement>,
+        id: number,
+    ) => {
+        // Change la valeur des inputs
         const newInputs = [...inputs];
-        typeof newInputs[id].value === 'string' ? newInputs[id].value = e.target.value: newInputs[id].value;
-        setInputs(newInputs)
+        typeof newInputs[id].value === 'string'
+            ? (newInputs[id].value = event.target.value)
+            : newInputs[id].value;
+
+        // Vérification de la valeur de l'input
+        newInputs[id].valid = checkInputValidity(
+            event.target.value,
+            newInputs[id].validationRules,
+        );
+
+        // Indique qu'un input à été touché
+        newInputs[id].touched = true;
+
+        // Vérificaton entière du formulaire
+        let formIsValid = true;
+        for(let input in newInputs) {
+            formIsValid = newInputs[input].valid && formIsValid
+        }
+        setIsValid(formIsValid);
+
+        setInputs(newInputs);
+    };
+
+    // Gère "l'envoi" du formulaire
+    const formHandler = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        console.log('done');
+    };
+
+    // Gère la vérification du formulaire
+    const checkInputValidity = (value: string, rules: InputValidationRules) => {
+        let isValid = true;
+
+        if (rules.required) {
+            isValid = value.trim() !== '' && isValid;
+
+            isValid =
+                value.length >= rules.minLength &&
+                value.length <= rules.maxLength && isValid;
+        }
+
+        return isValid;
+    };
+
+    // Determine error message
+    const errorMsg = (value: string|{value: string, displayValue:string}[], validity: boolean, messages: {forMinLength: string, forMaxLength: string,}, rules: InputValidationRules, touched: boolean, id: number) => {
+
+        let msg = '';
+
+        if(typeof value === 'string') {
+            if(value.length < rules.minLength && touched) {
+                msg = messages.forMinLength;
+            } else if(value.length > rules.maxLength && touched) {
+                msg = messages.forMaxLength;
+            } else {
+                msg = ''
+            }
+        }
+
+        return(
+            <span key={id} className={classes.error}>{!validity ? msg : null}</span>
+        )
     }
 
     // Form
     const form = (
-        <form>
+        <form onSubmit={(e) => formHandler(e)}>
             {inputs.map((input) => (
+                <Fragment key={input.id}>
                 <Input
                     label={input.label}
                     key={input.elementName}
                     elementType={input.elementType}
                     value={input.value}
                     config={input.elementConfig}
-                    changed={(e: React.ChangeEvent<HTMLInputElement>) => inputChangedHandler(e, input.id)}
+                    changed={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        inputChangedHandler(e, input.id)
+                    }
+                    valid={input.valid}
+                    touched={input.touched}
                 />
+                {errorMsg(input.value, input.valid, input.errorMessages, input.validationRules, input.touched, input.id)}
+                </Fragment>
             ))}
-            <input type='submit' value='Envoyer' className={classes.submitBtn} />
+            <input
+                type="submit"
+                value="Ajouter l'article"
+                disabled={!isValid}
+                className={classes.submitBtn}
+            />
         </form>
     );
 

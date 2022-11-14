@@ -1,7 +1,20 @@
 .submitBtn {
-    margin-top: 2rem;
+    margin: 2rem 0;
+    padding: 0.5rem 1rem;
+    border-radius: 0.2rem;
+    background-color: green;
+    color: #fff;
 }
 
 .submitBtn:hover {
     cursor: pointer;
+}
+
+.submitBtn:disabled {
+    cursor: not-allowed;
+    opacity: .3;
+}
+
+.error {
+    color: red;
 }
