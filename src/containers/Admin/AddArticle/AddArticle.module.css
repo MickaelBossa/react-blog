@@ -1,0 +1,7 @@
+.submitBtn {
+    margin-top: 2rem;
+}
+
+.submitBtn:hover {
+    cursor: pointer;
+}
