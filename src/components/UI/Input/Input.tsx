@@ -9,7 +9,7 @@ type FormProps = {
     label: string;
     elementType: string;
     value: string | { value: string; displayValue: string }[];
-    config: { type: string; placeholder: string };
+    config: { type: string; placeholder: string; };
     changed: any; // To change later
     valid: boolean;
     touched: boolean

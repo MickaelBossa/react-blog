@@ -3,6 +3,9 @@ import classes from './AddArticle.module.css';
 
 // Librairie
 import React, { useState, Fragment } from 'react';
+import axios from '../../../config/axios-firebase';
+import { useNavigate } from 'react-router-dom';
+import routes from '../../../config/routes';
 
 // Composant
 import Input from '../../../components/UI/Input/Input';
@@ -57,7 +60,8 @@ export default function AddArticle() {
             },
             errorMessages: {
                 forMinLength: 'Ce champ doit contenir au moins 5 caractères',
-                forMaxLength: 'Ce champ doit contenir moins de 10000 caractères',
+                forMaxLength:
+                    'Ce champ doit contenir moins de 10000 caractères',
             },
             touched: false,
         },
@@ -81,7 +85,7 @@ export default function AddArticle() {
                 forMinLength: 'Ce champ doit contenir au moins 2 caractères',
                 forMaxLength: 'Ce champ doit contenir moins de 30 caractères',
             },
-            touched: false
+            touched: false,
         },
         {
             id: 3,
@@ -112,16 +116,23 @@ export default function AddArticle() {
 
     const [isValid, setIsValid] = useState(false);
 
+    const [currentDraftValue, setCurrentDraftValue] = useState('yes');
+
+    // Constantes
+    const navigate = useNavigate()
+    
     // Functions
     const inputChangedHandler = (
         event: React.ChangeEvent<HTMLInputElement>,
         id: number,
     ) => {
         // Change la valeur des inputs
-        const newInputs = [...inputs];
-        typeof newInputs[id].value === 'string'
-            ? (newInputs[id].value = event.target.value)
-            : newInputs[id].value;
+        const newInputs = [...inputs];        
+        if(typeof newInputs[id].value === 'string') {
+            (newInputs[id].value = event.target.value)
+        } else {
+            setCurrentDraftValue(event.target.value)     
+        }
 
         // Vérification de la valeur de l'input
         newInputs[id].valid = checkInputValidity(
@@ -134,8 +145,8 @@ export default function AddArticle() {
 
         // Vérificaton entière du formulaire
         let formIsValid = true;
-        for(let input in newInputs) {
-            formIsValid = newInputs[input].valid && formIsValid
+        for (let input in newInputs) {
+            formIsValid = newInputs[input].valid && formIsValid;
         }
         setIsValid(formIsValid);
 
@@ -146,7 +157,22 @@ export default function AddArticle() {
     const formHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        console.log('done');
+        axios
+            .post('/articles.json', {
+                title: inputs[0].value,
+                content: inputs[1].value,
+                author: inputs[2].value,
+                draft: currentDraftValue,
+            })
+            .then((response) => {
+                console.log(response);
+                navigate(routes.HOME, {replace: true})
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+        console.log(inputs);
     };
 
     // Gère la vérification du formulaire
@@ -158,50 +184,66 @@ export default function AddArticle() {
 
             isValid =
                 value.length >= rules.minLength &&
-                value.length <= rules.maxLength && isValid;
+                value.length <= rules.maxLength &&
+                isValid;
         }
 
         return isValid;
     };
 
     // Determine error message
-    const errorMsg = (value: string|{value: string, displayValue:string}[], validity: boolean, messages: {forMinLength: string, forMaxLength: string,}, rules: InputValidationRules, touched: boolean, id: number) => {
-
+    const errorMsg = (
+        value: string | { value: string; displayValue: string }[],
+        validity: boolean,
+        messages: { forMinLength: string; forMaxLength: string },
+        rules: InputValidationRules,
+        touched: boolean,
+        id: number,
+    ) => {
         let msg = '';
 
-        if(typeof value === 'string') {
-            if(value.length < rules.minLength && touched) {
+        if (typeof value === 'string') {
+            if (value.length < rules.minLength && touched) {
                 msg = messages.forMinLength;
-            } else if(value.length > rules.maxLength && touched) {
+            } else if (value.length > rules.maxLength && touched) {
                 msg = messages.forMaxLength;
             } else {
-                msg = ''
+                msg = '';
             }
         }
 
-        return(
-            <span key={id} className={classes.error}>{!validity ? msg : null}</span>
-        )
-    }
+        return (
+            <span key={id} className={classes.error}>
+                {!validity ? msg : null}
+            </span>
+        );
+    };
 
     // Form
     const form = (
         <form onSubmit={(e) => formHandler(e)}>
             {inputs.map((input) => (
                 <Fragment key={input.id}>
-                <Input
-                    label={input.label}
-                    key={input.elementName}
-                    elementType={input.elementType}
-                    value={input.value}
-                    config={input.elementConfig}
-                    changed={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        inputChangedHandler(e, input.id)
-                    }
-                    valid={input.valid}
-                    touched={input.touched}
-                />
-                {errorMsg(input.value, input.valid, input.errorMessages, input.validationRules, input.touched, input.id)}
+                    <Input
+                        label={input.label}
+                        key={input.elementName}
+                        elementType={input.elementType}
+                        value={input.value}
+                        config={input.elementConfig}
+                        changed={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            inputChangedHandler(e, input.id)
+                        }
+                        valid={input.valid}
+                        touched={input.touched}
+                    />
+                    {errorMsg(
+                        input.value,
+                        input.valid,
+                        input.errorMessages,
+                        input.validationRules,
+                        input.touched,
+                        input.id,
+                    )}
                 </Fragment>
             ))}
             <input
