@@ -119,19 +119,21 @@ export default function AddArticle() {
     const [currentDraftValue, setCurrentDraftValue] = useState('yes');
 
     // Constantes
-    const navigate = useNavigate()
-    
+    const navigate = useNavigate();
+
+    const date = new Date();    
+
     // Functions
     const inputChangedHandler = (
         event: React.ChangeEvent<HTMLInputElement>,
         id: number,
     ) => {
         // Change la valeur des inputs
-        const newInputs = [...inputs];        
-        if(typeof newInputs[id].value === 'string') {
-            (newInputs[id].value = event.target.value)
+        const newInputs = [...inputs];
+        if (typeof newInputs[id].value === 'string') {
+            newInputs[id].value = event.target.value;
         } else {
-            setCurrentDraftValue(event.target.value)     
+            setCurrentDraftValue(event.target.value);
         }
 
         // Vérification de la valeur de l'input
@@ -150,6 +152,7 @@ export default function AddArticle() {
         }
         setIsValid(formIsValid);
 
+        // Envoie les nouveaux inputs avec leurs valeurs
         setInputs(newInputs);
     };
 
@@ -163,10 +166,14 @@ export default function AddArticle() {
                 content: inputs[1].value,
                 author: inputs[2].value,
                 draft: currentDraftValue,
+                catchPhrase:
+                    typeof inputs[1].value === 'string' &&
+                    inputs[1].value.substr(0, 140) + '...', 
+                date: date.toLocaleDateString()
             })
             .then((response) => {
                 console.log(response);
-                navigate(routes.HOME, {replace: true})
+                navigate(routes.HOME, { replace: true });
             })
             .catch((error) => {
                 console.log(error);

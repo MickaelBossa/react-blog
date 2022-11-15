@@ -8,6 +8,7 @@
 
 .inputContainer input, .inputContainer textarea {
     width: 80vw;
+    max-width: 80vw;
     height: 10vh;
     text-align: center;
 }
