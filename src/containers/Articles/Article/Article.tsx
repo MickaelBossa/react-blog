@@ -34,27 +34,11 @@ export default function Article() {
             });
     }, []);
 
-    // Afficher l'article
-    const displayArticleContent = () => {
-      
-      let titleArticle = '';
-      let contentArticle = '';
-      let authorArticle = '';
-
-      if(articleData !== undefined) {
-        titleArticle = articleData.title;
-        contentArticle = articleData.content;
-        authorArticle = articleData.author;
-      }
-
-        return (
-            <div className={classes.articleContainer}>
-                <h1>{titleArticle}</h1>
-                <p>{contentArticle}</p>
-                <small>{authorArticle}</small>
-            </div>
-        );
-    };
-
-    return displayArticleContent()
+    return(
+        <div className={classes.articleContainer}>
+        <h1>{articleData?.title}</h1>
+        <p>{articleData?.content}</p>
+        <small>{articleData?.author}</small>
+    </div>
+    )
 }
