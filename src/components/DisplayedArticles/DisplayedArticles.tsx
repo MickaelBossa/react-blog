@@ -16,6 +16,7 @@ type ArticleType = {
     catchPhrase: string;
     date: string;
     key: string;
+    slug: string;
 }[];
 
 export default function DisplayedArticles({
@@ -33,6 +34,7 @@ export default function DisplayedArticles({
                     catchPhrase={article.catchPhrase}
                     author={article.author}
                     key={article.key}
+                    slug={article.slug}
                 />
             ))}
         </section>

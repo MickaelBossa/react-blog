@@ -19,6 +19,7 @@ type ArticleType = {
     catchPhrase: string;
     date: string;
     key: string;
+    slug: string;
 }[];
 
 export default function Home() {
