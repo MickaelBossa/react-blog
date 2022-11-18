@@ -34,6 +34,8 @@ export default function Articles() {
             articlesArray.push({...response.data[key], key:key})
           }
 
+          articlesArray.reverse();
+
           setArticlesData(articlesArray);
           
         })

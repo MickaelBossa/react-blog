@@ -121,7 +121,7 @@ export default function AddArticle() {
     // Constantes
     const navigate = useNavigate();
 
-    const date = new Date();    
+    const date = new Date();
 
     // Functions
     const inputChangedHandler = (
@@ -156,10 +156,32 @@ export default function AddArticle() {
         setInputs(newInputs);
     };
 
+    // Génère un slug
+    const generateSlug = (str: string) => {
+        str = str.replace(/^\s+|\s+$/g, ''); // trim
+        str = str.toLowerCase();
+
+        // remove accents, swap ñ for n, etc
+        var from = 'àáãäâèéëêìíïîòóöôùúüûñç·/_,:;';
+        var to = 'aaaaaeeeeiiiioooouuuunc------';
+
+        for (var i = 0, l = from.length; i < l; i++) {
+            str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+        }
+
+        str = str
+            .replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+            .replace(/\s+/g, '-') // collapse whitespace and replace by -
+            .replace(/-+/g, '-'); // collapse dashes
+
+        return str;
+    };
+
     // Gère "l'envoi" du formulaire
     const formHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
+        // Envoi l'article sur firebase
         axios
             .post('/articles.json', {
                 title: inputs[0].value,
@@ -168,8 +190,11 @@ export default function AddArticle() {
                 draft: currentDraftValue,
                 catchPhrase:
                     typeof inputs[1].value === 'string' &&
-                    inputs[1].value.substr(0, 140) + '...', 
-                date: date.toLocaleDateString()
+                    inputs[1].value.substr(0, 140) + '...',
+                date: date.toLocaleDateString(),
+                slug:
+                    typeof inputs[0].value === 'string' &&
+                    generateSlug(inputs[0].value),
             })
             .then((response) => {
                 console.log(response);
