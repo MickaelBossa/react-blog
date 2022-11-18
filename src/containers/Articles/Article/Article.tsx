@@ -11,6 +11,7 @@ type DisplayArticleContentType = {
   title: string;
   content: string;
   author: string;
+  date: string;
 }
 
 export default function Article() {
@@ -38,7 +39,7 @@ export default function Article() {
         <div className={classes.articleContainer}>
         <h1>{articleData?.title}</h1>
         <p>{articleData?.content}</p>
-        <small>{articleData?.author}</small>
+        <small>{articleData?.author} le {articleData?.date}</small>
     </div>
     )
 }
